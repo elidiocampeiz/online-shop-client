@@ -1,0 +1,27 @@
+
+.header-component {
+    height: 70px;
+    width: 100%;
+    display: flex;
+    justify-content: center;
+    margin-bottom: 25px;
+}
+
+.options-container {
+    width: 50%;
+    height: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+
+.option-link {
+    padding: 10px 15px;
+    text-decoration: none;
+    cursor: pointer;
+    &:hover {
+        transform: scale(1.1);
+        transition: transform 200ms;
+    }
+}
