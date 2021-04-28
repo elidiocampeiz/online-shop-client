@@ -1,12 +1,19 @@
-import React, {useState } from 'react';
+import React, {useEffect, useState } from 'react';
 import { Route, Switch, Redirect } from 'react-router-dom';
 import './App.css';
 import Header from './components/Header/component.js'
 import Login from './components/Login/component.js'
-
+import {getUsers} from './online-shop-api';
 function App() {
   const [currentUser, setCurrentuser] = useState('USF Student')
   const [selectedPage, setSelectedPage] = useState('Homepage')
+  
+  
+
+  useEffect(()=>{
+    getUsers();
+    
+  })
   return (
     <div className="app">
       <Header setSelectedPage={setSelectedPage}/>
