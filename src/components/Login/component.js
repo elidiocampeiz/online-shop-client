@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import { Form, Button} from 'react-bootstrap';
-import {createUser } from '../../online-shop-api'
+import {createUser, deleteUser, createProduct, deleteProduct } from '../../online-shop-api'
 import "./styles.css";
 
 const Login = ({ setSelectedPage }) => {
@@ -9,6 +9,9 @@ const Login = ({ setSelectedPage }) => {
   const onInput = (setValue) => ({target:{value}}) => setValue(value);
   const [currentUser, setCurrentuser] = useState("");
   const signOut = () => console.log("signOut");
+  // deleteUser(5);
+  // createProduct();
+  // deleteProduct(5)
   return (
     <div className="login-container">
       <Form>
