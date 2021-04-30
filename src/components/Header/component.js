@@ -1,55 +1,56 @@
 import React, { useState } from "react";
 import "./styles.css";
+import { BrowserRouter as Router, Route, Link } from "react-router-dom";
 
-const Header = ({ setSelectedPage }) => {
-  const [currentUser, setCurrentuser] = useState("");
-  const signOut = () => console.log("signOut");
+const Header = () => {
+  const [currentUser, setCurrentuser] = useState(false);
   return (
     <div className="header-component ">
       <div className="options-container">
-        <div
+        <Link
           className="option-link"
           to="/shop"
-          onClick={() => setSelectedPage("SHOP")}
+          
         >
           SHOP
-        </div>
-        <div
+        </Link>
+        <Link
+          className="option-link"
+          to="/"
+        >
+          HOMEPAGE
+        </Link>
+        <Link
           className="option-link"
           to="/contact"
-          onClick={() => setSelectedPage("CONTACT")}
         >
           CONTACT
-        </div>
-        <div
+        </Link>
+        <Link
           className="option-link"
           to="/order-history"
-          onClick={() => setSelectedPage("ORDER HISTORY")}
         >
           ORDER HISTORY
-        </div>
-        <div
+        </Link>
+        <Link
           className="option-link"
           to="/cart"
-          onClick={() => setSelectedPage("CART")}
         >
           CART
-        </div>
+        </Link>
         {currentUser ? (
-          <div
+          <Link
             className="option-link"
-            onClick={() => setSelectedPage("SIGN OUT")}
           >
             SIGN OUT
-          </div>
+          </Link>
         ) : (
-          <div
+          <Link
             className="option-link"
             to="/signin"
-            onClick={() => setSelectedPage("SIGN IN")}
           >
             SIGN IN
-          </div>
+          </Link>
         )}
       </div>
     </div>

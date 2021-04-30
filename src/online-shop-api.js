@@ -1,16 +1,12 @@
 import React from "react";
 
 export function getUsers() {
-    fetch('http://localhost:3001/user/get')
-      .then(response => {
-        return response.text();
-      })
-      .then(data => {
-        console.log(data)
-      });
-  }
+  fetch("http://localhost:3001/user/get").then((res) => {
+    return res.text();
+  });
+}
 
-export function createUser(username, password, is_adm=false) {
+export async function createUser(username, password, is_adm=false) {
     fetch('http://localhost:3001/user/add', {
       method: 'POST',
       headers: {
@@ -26,7 +22,7 @@ export function createUser(username, password, is_adm=false) {
         getUsers();
       });
   }
-  export function deleteUser(id) {
+  export async function deleteUser(id) {
       fetch(`http://localhost:3001/user-delete/${id}`, {
           method: 'DELETE',
         })
@@ -39,7 +35,7 @@ export function createUser(username, password, is_adm=false) {
         });
     }
     
-    export function getProducts() {
+    export async function getProducts() {
       fetch('http://localhost:3001/product/get')
         .then(response => {
           return response.text();
@@ -49,7 +45,7 @@ export function createUser(username, password, is_adm=false) {
         });
     }
   
-    export function createProduct(product_name, price) {
+    export async function createProduct(product_name, price) {
       fetch('http://localhost:3001/product/add', {
         method: 'POST',
         headers: {
@@ -66,7 +62,7 @@ export function createUser(username, password, is_adm=false) {
         });
     }
 
-    export function deleteProduct(id) {
+    export async function deleteProduct(id) {
         fetch(`http://localhost:3001/product-delete/${id}`, {
             method: 'DELETE',
           })
