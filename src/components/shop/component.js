@@ -69,6 +69,10 @@ function Shop() {
       alert("Please Login to Checkout");
       return 
     }
+    if(!totalAmount || totalAmount <= 0){
+      alert("Please add Items to cart before checkout");
+      return 
+    }
     try {
       const data = await createOrder(currentUser.user_id,`$${totalAmount}`);
       cartList.forEach(async ({ product_id, count })=> {
@@ -155,6 +159,7 @@ function Shop() {
             ))}
           </ListGroup>
         </Card>
+        
         <Card
           style={{
             flex: 1,

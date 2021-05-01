@@ -3,13 +3,13 @@ import './styles.css'
 import { ListGroup, Card, FormControl } from "react-bootstrap";
 import { UserContext} from "../../contexts";
 import {
-     
+    getAvgOrders,
     getOrdersPerUser, 
-    
   } from '../../online-shop-api';
+
 function OrderHistory() {
     const { currentUser, setCurrentuser } = useContext(UserContext);
-
+    const [avgOrders, setAvgOrders] = useState(0)
     const [orderHistory, setOrderHistory] = useState()
     const [orderHistoryList ,setorderHistoryList] = useState([]);
 
@@ -39,6 +39,20 @@ function OrderHistory() {
               console.log(err);
             }
           }
+          async function getAvgOrdersData() {
+            if (!currentUser || !currentUser.is_adm){
+                return 
+            }
+            try {
+              const data = await getAvgOrders();
+              const {avg} = data;
+              setAvgOrders(avg)
+
+            } catch (err) {
+              console.log(err);
+            }
+          }
+          getAvgOrdersData();
           getOrdersPerUserData();
       }, [currentUser])
       const getDate = (date) => {
@@ -53,8 +67,13 @@ function OrderHistory() {
   return (
     <div className="shop-container">
       <h3>Welcome to Order History</h3>
-
-      {currentUser ? (
+      {currentUser && currentUser.is_adm && (
+            <div style={{margin:20, justifyContent:'center', alignContent:'center'}}>
+              <div>Hi ADM {currentUser.username}</div>
+              <div>The Average number of orders per user is: {Number(Math.round(avgOrders + "e2") + "e-2")}</div>
+            </div>
+          )}
+      {currentUser? (
         <div
           style={{
             display: "flex",
@@ -99,7 +118,9 @@ function OrderHistory() {
           </Card>
         </div>
       ) : (
-        <div>Please login to see your Order History</div>
+        <div>
+          <div>Please login to see your Order History</div>
+        </div>
       )}
     </div>
   );

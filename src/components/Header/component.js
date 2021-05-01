@@ -8,14 +8,11 @@ const Header = () => {
   return (
     <div className="header-component ">
       <div className="options-container">
-        <Link className="option-link" to="/shop">
-          SHOP
-        </Link>
         <Link className="option-link" to="/">
           HOMEPAGE
         </Link>
-        <Link className="option-link" to="/contact">
-          CONTACT
+        <Link className="option-link" to="/shop">
+          SHOP
         </Link>
         <Link className="option-link" to="/order-history">
           ORDER HISTORY
@@ -25,7 +22,7 @@ const Header = () => {
           SALES STATS
         </Link>}
         <Link className="option-link" to="/signin">
-          SIGN IN
+          LOGIN / REGISTER
         </Link>
       </div>
     </div>

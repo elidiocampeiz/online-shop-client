@@ -4,7 +4,18 @@ export async function getUsers() {
   const data = await res.json();
   return data;
 }
+export async function loginUser(username, password) {
 
+  const res = await fetch("http://localhost:3001/user/login", {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json",
+    },
+    body: JSON.stringify({ username, password }),
+  });
+  const data = await res.json();
+  return data;
+}
 
 export async function createUser(username, password, is_adm=true) {
   const res = await fetch('http://localhost:3001/user/add', {
@@ -14,7 +25,7 @@ export async function createUser(username, password, is_adm=true) {
       },
       body: JSON.stringify({username, password, is_adm}),
     });
-    const data = res.text();
+    const data = await res.json();
     return data;
   }
   export async function deleteUser(id) {
@@ -123,6 +134,17 @@ export async function createOrder(uID, price) {
 
       export async function getSalesPerProduct() {
         const res = await fetch("http://localhost:3001/sales/get-product")
+        const data = await res.json();
+        return data;
+      }
+      export async function getSalesPerDate() {
+        const res = await fetch("http://localhost:3001/sales/get-date")
+        const data = await res.json();
+        return data;
+      }
+
+      export async function getAvgOrders() {
+        const res = await fetch("http://localhost:3001/order/get-avg");
         const data = await res.json();
         return data;
       }
