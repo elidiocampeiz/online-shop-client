@@ -1,6 +1,3 @@
-import React from "react";
-
-
 
 export async function getUsers() {
   const res = await fetch("http://localhost:3001/user/get")
@@ -9,7 +6,7 @@ export async function getUsers() {
 }
 
 
-export async function createUser(username, password, is_adm=false) {
+export async function createUser(username, password, is_adm=true) {
   const res = await fetch('http://localhost:3001/user/add', {
       method: 'POST',
       headers: {
