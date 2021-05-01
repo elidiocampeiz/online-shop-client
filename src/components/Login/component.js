@@ -1,5 +1,5 @@
 import React, { useContext, useState } from "react";
-import { Form, Button } from "react-bootstrap";
+import { Form, Button, Card } from "react-bootstrap";
 import { createUser, deleteUser, getUsers } from "../../online-shop-api";
 import "./styles.css";
 import { UserContext, UsersContext } from "../../contexts";
@@ -11,12 +11,14 @@ const Login = ({ setSelectedPage }) => {
   const { currentUser, setCurrentuser } = useContext(UserContext);
   const { users, setUsers } = useContext(UsersContext);
   const login = async (username, password) => {
+    if(username==''|| password==''){
+      alert("Invalid Username or Password") 
+      return
+    }
     const newUsers = await getUsers();
     setUsers(newUsers);
     const type = typeof users;
-    console.log(username, password, type, users, newUsers);
-    const user = newUsers?.find((u) => u.username == username && u.password == password) ||
-      {};
+    const user = newUsers?.find((u) => u.username == username && u.password == password);
     if (user) {
       setCurrentuser(user);
       alert("You Are logged in");
@@ -30,6 +32,10 @@ const Login = ({ setSelectedPage }) => {
     alert("Account Deleted");
   };
   const registration = async (username, password) => {
+    if(username==''|| password==''){
+      alert("Invalid Username or Password") 
+      return
+    }
     const res = await createUser(username, password);
     console.log('response Promise', res);
     const newUsers = await getUsers();
@@ -43,7 +49,15 @@ const Login = ({ setSelectedPage }) => {
     }
   }
   return (
-    <div className="login-container">
+    <div 
+      className="login-container" 
+      style={{
+        width: '100%',
+        justifyContent:'center', 
+        display:'flex', 
+        alignSelf:'center'
+      }}
+    >
       {currentUser == null ? (
         <Form>
           <Form.Group controlId="formBasicEmail">
@@ -111,6 +125,7 @@ const Login = ({ setSelectedPage }) => {
           </Form>
         </div>
       )}
+
     </div>
   );
 };
