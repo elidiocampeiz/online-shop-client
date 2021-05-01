@@ -14,7 +14,11 @@ function Shop() {
       <ListGroup>
         {products.map((product) => (
           <ListGroup.Item key={product.product_id} className='product'>
-            {product?.product_name} 
+            <div>
+              <p>
+              {product.product_name}
+              </p>
+            </div>
           </ListGroup.Item>
         ))}
       </ListGroup>
