@@ -66,15 +66,15 @@ export async function createUser(username, password, is_adm=true) {
   return data;
 }
 
-export async function createOrder(uID, value, date_of_order=Date.now()) {
+export async function createOrder(uID, price) {
   const res = await fetch('http://localhost:3001/order/add', {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
       },
-      body: JSON.stringify({uID, value, date_of_order}),
+      body: JSON.stringify({uID, price}),
     });
-    const data = res.text();
+    const data = await res.json();
     return data;
   }
 
@@ -97,15 +97,15 @@ export async function createOrder(uID, value, date_of_order=Date.now()) {
     return data;
   }
 
-  export async function createSale(orderID, productID, product_count, date_of_sale) {
-    const res = await fetch('http://localhost:3001/sale/add', {
+  export async function createSale(orderID, productID, product_count) {
+    const res = await fetch('http://localhost:3001/sales/add', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
         },
-        body: JSON.stringify({orderID, productID, product_count, date_of_sale}),
+        body: JSON.stringify({orderID, productID, product_count}),
       });
-      const data = res.text();
+      const data = await res.json();
       return data;
     }
 

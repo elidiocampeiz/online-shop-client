@@ -1,11 +1,13 @@
-import React, { useEffect, useMemo, useState, useContext } from "react";
+import React, { useEffect, useMemo, useState, useContext, useCallback } from "react";
 import "./styles.css";
 import { ListGroup, Card, FormControl } from "react-bootstrap";
 import { UserContext, ProductsContext, CartContext } from "../../contexts";
-
+import {createOrder, createSale} from '../../online-shop-api'
 function Shop() {
   const { products, setProducts } = useContext(ProductsContext);
   const { cart, setCart } = useContext(CartContext);
+  const { currentUser, setCurrentuser } = useContext(UserContext);
+
   const [productsList, setProductsList] = useState();
   const cartList = useMemo(
     () =>
@@ -62,7 +64,24 @@ function Shop() {
       setProductsList(products);
     }
   };
-
+  const checkout = useCallback( async () => {
+    if( !currentUser || !currentUser.user_id){
+      alert("Please Login to Checkout");
+      return 
+    }
+    try {
+      const data = await createOrder(currentUser.user_id,`$${totalAmount}`);
+      cartList.forEach(async ({ product_id, count })=> {
+        const sale = await createSale(data?.order_id, product_id, count);
+        console.log(sale);
+      });
+      console.log(data);
+    } catch (err) {
+      console.log(err);
+    }
+    alert("Thank you for your purchase!");
+    clear();
+  }, [cartList, totalAmount, currentUser,clear])
   useEffect(() => {
     setProductsList(products);
   }, [products]);
@@ -183,7 +202,7 @@ function Shop() {
             }}
           >
             <div>Total: ${Number(Math.round(totalAmount + "e2") + "e-2")}</div>
-            <button onClick={() => {}}> Checkout</button>
+            <button onClick={checkout}> Checkout</button>
             <button onClick={clear}> Clear</button>
           </ListGroup.Item>
         </Card>
