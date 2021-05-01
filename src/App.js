@@ -4,27 +4,29 @@ import './App.css';
 import Header from './components/Header/component.js'
 import Login from './components/Login/component.js'
 import Shop from './components/Shop/component.js';
+//SaleStats
+import SaleStats from './components/SaleStats/component.js'
+
 import Homepage from './components/homepage/component.js'
 import {getUsers, getProducts, getOrders, getOrdersPerUser, getSales, getSalesPerProduct} from './online-shop-api';
-import {UserContext, UsersContext, ProductsContext} from './contexts';
-
+import {UserContext, UsersContext, ProductsContext, CartContext} from './contexts';
 function App() {
 
-  //const a = getOrders();
-  //const a = getOrdersPerUser(1);
 
   const [currentUser, setCurrentuser] = useState(null)
+  const [cart, setCart] = useState({})
   const [users, setUsers] = useState([])
   const [products, setProducts] = useState([]);
-  const productsPoviderValue = useMemo(()=>({products, setProducts}), [products, setProducts])
   const [orders, setOrders] = useState([]);
   const [ordersPerUser, setOrdersPerUser] =  useState([]);
   const [salesPerProduct, setSalesPerProduct] =  useState([]);
   const [sales, setSales] = useState([]);
 
+  const productsPoviderValue = useMemo(()=>({products, setProducts}), [products, setProducts])
   const userPoviderValue = useMemo(()=>({currentUser, setCurrentuser}), [currentUser, setCurrentuser])
-  const usersPoviderValue = useMemo(()=>({users, setUsers}), [users, setUsers])
-
+  const usersPoviderValue = useMemo(()=>({users, setUsers}), [users, setUsers]);
+  const cartProvicerValue =useMemo(()=>({cart, setCart}), [cart, setCart]);
+  
   useEffect(() => {
     async function getUsersData() {
       try {
@@ -94,17 +96,20 @@ function App() {
 
   return (
     <div className="app">
-      <Header />
       <UsersContext.Provider value={usersPoviderValue}>
         <UserContext.Provider value={userPoviderValue}>
           <ProductsContext.Provider value={productsPoviderValue}>
-            <Switch>
-              <Route path="/" exact component={Homepage} />
-              <Route path="/shop" component={Shop} />
-              <Route path="/signin" component={Login} />
-              <Route path="/*" component={Homepage} />
-            </Switch>
-            {/* {selectedPage === "SIGN IN" ? <Login /> : selectedPage} */}
+            <CartContext.Provider value={cartProvicerValue}>
+              <Header />
+              <Switch>
+                <Route path="/" exact component={Homepage} />
+                <Route path="/shop" component={Shop} />
+                {currentUser&&currentUser.is_adm&&<Route path="/sale-stats" component={SaleStats} />}
+                <Route path="/signin" component={Login} />
+                <Route path="/*" component={Homepage} />
+              </Switch>
+              {/* {selectedPage === "SIGN IN" ? <Login /> : selectedPage} */}
+            </CartContext.Provider>
           </ProductsContext.Provider>
         </UserContext.Provider>
       </UsersContext.Provider>
