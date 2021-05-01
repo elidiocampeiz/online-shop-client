@@ -2,7 +2,7 @@ import React, { useContext, useState } from "react";
 import { Form, Button } from "react-bootstrap";
 import { createUser, deleteUser, getUsers } from "../../online-shop-api";
 import "./styles.css";
-import { UserContext, UsersContext } from "../../UserContex";
+import { UserContext, UsersContext } from "../../contexts";
 
 const Login = ({ setSelectedPage }) => {
   const [username, setUsername] = useState("");
@@ -11,15 +11,12 @@ const Login = ({ setSelectedPage }) => {
   const { currentUser, setCurrentuser } = useContext(UserContext);
   const { users, setUsers } = useContext(UsersContext);
   const login = async (username, password) => {
-    console.log(username, password, users);
-    const bool = users instanceof Array;
+    const newUsers = await getUsers();
+    setUsers(newUsers);
     const type = typeof users;
-    console.log(bool, type);
-    // users.forEach(el=>console.log(el))
-    const user =
-      users?.find((u) => u.username == username && u.password == password) ||
+    console.log(username, password, type, users, newUsers);
+    const user = newUsers?.find((u) => u.username == username && u.password == password) ||
       {};
-    console.log(user);
     if (user) {
       setCurrentuser(user);
       alert("You Are logged in");
@@ -32,6 +29,19 @@ const Login = ({ setSelectedPage }) => {
     setCurrentuser(null);
     alert("Account Deleted");
   };
+  const registration = async (username, password) => {
+    const res = await createUser(username, password);
+    console.log('response Promise', res);
+    const newUsers = await getUsers();
+    setUsers(newUsers);
+    const user = newUsers?.find((u) => u.username == username && u.password == password) || {};
+    if (user) {
+      setCurrentuser(user);
+      alert("New Account Created. You Are logged in");
+    } else {
+      alert("Fail to Create Account");
+    }
+  }
   return (
     <div className="login-container">
       {currentUser == null ? (
@@ -63,7 +73,7 @@ const Login = ({ setSelectedPage }) => {
             <div style={{ marginRight: 10 }}>
               <Button
                 variant="primary"
-                onClick={() => createUser(username, password)}
+                onClick={() => registration(username, password)}
               >
                 Register
               </Button>

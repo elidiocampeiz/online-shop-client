@@ -1,0 +1,8 @@
+@import 'bootstrap/dist/css/bootstrap.min.css';
+
+
+.shop-container {
+    margin-top: 100px;
+    justify-content: center;
+    text-align: center;
+}

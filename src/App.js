@@ -3,46 +3,56 @@ import { Route, Switch, Redirect } from 'react-router-dom';
 import './App.css';
 import Header from './components/Header/component.js'
 import Login from './components/Login/component.js'
+import Shop from './components/Shop/component.js';
 import Homepage from './components/homepage/component.js'
-import {getUsers} from './online-shop-api';
-import {UserContext, UsersContext} from './UserContex';
+import {getUsers, getProducts} from './online-shop-api';
+import {UserContext, UsersContext, ProductsContext} from './contexts';
 
 function App() {
   const [currentUser, setCurrentuser] = useState(null)
   const [users, setUsers] = useState([])
-  const [selectedPage, setSelectedPage] = useState('Homepage')
+  const [products, setProducts] = useState([]);
+  const productsPoviderValue = useMemo(()=>({products, setProducts}), [products, setProducts])
+
   const userPoviderValue = useMemo(()=>({currentUser, setCurrentuser}), [currentUser, setCurrentuser])
   const usersPoviderValue = useMemo(()=>({users, setUsers}), [users, setUsers])
 
-  useEffect( ()=>{
-    // async function getData (){
-    //   try {
-    //   const data = getUsers();
-    //   setUsers(data);
-    // } catch (err){
-    //   console.log(err);
-    // }
-    // }
-    fetch("http://localhost:3001/user/get")
-      .then((res) => {
-        return res.json();
-      })
-      .then((data) => setUsers(data));
-  }, [])
+  useEffect(() => {
+    async function getUsersData() {
+      try {
+        const data = await getUsers();
+        setUsers(data);
+      } catch (err) {
+        console.log(err);
+      }
+    }
+    async function getProductsData() {
+      try {
+        const data = await getProducts();
+        console.log("useEffec", data);
+        setProducts(data);
+      } catch (err) {
+        console.log(err);
+      }
+    }
+    getProductsData();
+    getUsersData();
+  }, []);
 
   return (
     <div className="app">
       <Header />
-
       <UsersContext.Provider value={usersPoviderValue}>
         <UserContext.Provider value={userPoviderValue}>
-          <Switch>
-          <Route path="/" exact component={Homepage} />
-
-          <Route path="/signin" component={Login} />
-          <Route path="/*" component={Homepage} />
-          </Switch>
-          {/* {selectedPage === "SIGN IN" ? <Login /> : selectedPage} */}
+          <ProductsContext.Provider value={productsPoviderValue}>
+            <Switch>
+              <Route path="/" exact component={Homepage} />
+              <Route path="/shop" component={Shop} />
+              <Route path="/signin" component={Login} />
+              <Route path="/*" component={Homepage} />
+            </Switch>
+            {/* {selectedPage === "SIGN IN" ? <Login /> : selectedPage} */}
+          </ProductsContext.Provider>
         </UserContext.Provider>
       </UsersContext.Provider>
     </div>
